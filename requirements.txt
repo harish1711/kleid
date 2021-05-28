@@ -1,0 +1,14 @@
+blinker
+Click
+Flask
+Flask-Mail
+Flask-MySQLdb
+Flask-Uploads
+itsdangerous
+Jinja2
+MarkupSafe
+mysqlclient
+passlib
+Werkzeug
+WTForms
+stripe

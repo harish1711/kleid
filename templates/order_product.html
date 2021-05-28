@@ -1,0 +1,157 @@
+{% extends 'layout.html' %} {% block body %}
+<!-- Page Content -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- <div class="col-lg-3 my-4">
+            <div class="list-group">
+                <a href="/tshirt" class="list-group-item">T-Shirt</a>
+                <a href="/wallet" class="list-group-item">Wallet</a>
+                <a href="/belt" class="list-group-item">Belt</a>
+                <a href="/shoes" class="list-group-item">Shoes</a>
+            </div>
+        </div> -->
+        <!-- /.col-lg-3 -->
+        <div class="col-lg-12">
+            <div class="row">
+                {% for product in tshirts %}
+                <div class="col-lg-5 text-center">
+                    <div class="container p-5">
+                        <img class="img-fluid shadow" src="static/image/product/{{product.category}}/{{product.picture}}" width="500px" height="100px">
+
+                    </div>
+
+                </div>
+                <!-- /.card -->
+                <div class="col-lg-6 m-auto shadow">
+                    <h4 class="text-capitalize">The total amount of</h4>
+                    {% from "includes/_formhelpers.html " import render_field %}
+                    <table class="table table-responsive table-borderless ">
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="container ">
+                                        <p class="pe-2 pt-2" style="float:left">Qty</p>
+
+                                        <select id="select" class="form-select" style="width:100">
+                                         
+                                            <option selected value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="3">4</option>
+                                            <option value="3">5</option>
+                                            <option value="2">6</option>
+                                            <option value="3">7</option>
+                                            <option value="3">8</option>
+                                            <option value="3">9</option>
+                                            <option value="3">10</option>
+                                          </select>
+                                    </div>
+
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>Temporary amount </p>
+                                </td>
+
+                                <td>
+                                    <p id="price">₹{{ product.price}} </p>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+
+
+
+
+                    <button style="float: right;" id="checkout-button1" class="btn btn-primary m-3">Confirm Checkut</button>
+                    <input type="hidden" id="Productid" value={{product.id}} name=" pid ">
+                    <input type="hidden" id="Productprice" value={{product.price}} >
+                    
+
+
+                </div>
+                {% endfor %}
+                <!-- /.card -->
+
+            </div>
+
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+</div>
+    
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch "></script>
+    <script src="https://js.stripe.com/v3/ "></script>
+    <script>
+        $(document).ready(function() {
+            $price = $("#price ").text().slice(1);
+
+            $('#select').change(function() {
+                quantity = $('option:selected', this).text();
+
+                $("#price ").text('₹' + $price * quantity);
+            });
+
+
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var stripe = Stripe("pk_test_51IZdK3SBnitWe2MbpDJ9kmqmxAJOn0jmWzMoyQdgmOwf9elqcS9bOl5YnuBvu49Doiwfe6FDhCAhC369GX9uwX6I00mk7orC60 ");
+            var checkoutButton = document.getElementById("checkout-button1");
+
+            checkoutButton.addEventListener("click", function(e) {
+               
+
+                // var imgFullURL = document.getElementById('productimg').src;
+                
+                price = document.getElementById("Productprice").value;
+                
+                var e = document.getElementById("select");
+                quantity=e.options[e.selectedIndex].text;
+
+                prouduct = document.getElementById("Productid").value;
+                
+                fetch("/create-checkout-session", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            price: price*100,
+                            pid: prouduct,
+                            quantity: quantity
+                        }),
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(session) {
+                        return stripe.redirectToCheckout({
+                            sessionId: session.id
+                        });
+                    })
+                    .then(function(result) {
+                        // If redirectToCheckout fails due to a browser or network
+                        // error, you should display the localized error message to your
+                        // customer using error.message.
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error("Error: ", error);
+                    });
+            });
+        });
+    </script>
+    <!-- /.container -->
+    {% endblock %}

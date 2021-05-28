@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block body %}
+<!-- Page Content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+            <h1 class="my-4">Fruits and Vegetables</h1>
+            <div class="list-group">
+                <a href="/homecare" class="list-group-item">Home care</a>
+                <a href="/eggmeatfish" class="list-group-item">Egg meat and fish</a>
+                <a href="/Bevearages" class="list-group-item">Bevearages</a>
+                <a href="/fruitsandvegitables" class="list-group-item active">Fruits and Vegetables</a>
+            </div>
+        </div>
+        <!-- /.col-lg-3 -->
+        <div class="col-lg-10">
+            {% include 'includes/_flashmsg.html' %}
+
+            <div class="row my-4">
+                {% for product in fruitsandvegitables %}
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-3 mb-4">
+                    <div class="product-grid6">
+                        <div class="product-image6">
+                            <a href="/{{product.category}}?view={{product.id}}">
+                                <div class="card-img-top id_{{product.id}}"
+                                    style="background: url('static/image/product/{{product.category}}/{{product.picture}}'); background-repeat:no-repeat; background-size: cover; height:200px;width:100% ">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="title"><a class="card-title" href="javascript:void();">{{ product.pName}}</a>
+                            </h3>
+                            <div class="price">Rs {{product.price}}
+                                <span>Rs {{product.price+150}}</span>
+                            </div>
+                        </div>
+                        <ul class="social">
+                            <li><a href="" data-tip="Quick View"><i class="fa fa-search mt-2"></i></a></li>
+                            <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag mt-2"></i></a></li>
+                            <li><a href="" data-tip="Add to Cart"><i class="fa fa-shopping-cart mt-2"></i></a></li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'layout.html' %} {% block body %}
+<!-- Page Content -->
+{% for product in tshirts %}
+
+<nav class="p-4 m-2" style="background-color: #F7F7F7;" aria-label="breadcrumb">
+    <ol class="breadcrumb justify-content-center ">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{product.category}}</li>
+    </ol>
+</nav>
+<div class="container">
+    <div class="row">
+
+        <!-- /.col-lg-3 -->
+        <div class="col-lg-12">
+            <div class="row mb-5">
+                <div class="col-lg-6">
+                    <div class="card shadow mt-4">
+                        <img class="img-fluid" src="static/image/product/{{product.category}}/{{product.picture}}" width="400px" height="100px" alt="">
+                    </div>
+
+                </div>
+                <!-- /.card -->
+                <div class="col-lg-6 ">
+                    <div class="container  my-4 shadow">
+
+                        <div class="card-body mx-2">
+                            <h3 class="card-title mb-5">{{ product.pName}}</h3>
+
+
+
+
+                            <div class="flex-container justify-content-start">
+                                <div class="me-3">
+                                    <h4 class="text-danger">₹{{ product.price}}</h4>
+                                </div>
+                                <div>
+                                    <h4>
+                                        <del>₹{{ product.price+50}}</del></h4>
+                                </div>
+
+                            </div>
+                            <h5 class="card-title mb-5">Available : {{ product.available}}</h5>
+                            <p class="card-text">{{ product.description}}</p>
+                            
+
+
+
+                            {% if session.logged_in %}
+
+                            <a href="/{{ product.category}}?order={{product.id}}" id="checkout-button" class=" btn btn-success ">Order Now</a> {% else %}
+                            <a href="/login?cat={{product.category}}&order={{product.id}}" id="checkout-button" class=" btn btn-success ">Order Now</a> {% endif%}
+                        </div>
+                    </div>
+
+
+                </div>
+                {% endfor %}
+                <!-- /.card -->
+
+
+
+
+            </div>
+
+
+
+
+
+            {% if x == '' %}
+            <h2 class="mb-4 ">No similar product found</h2>
+            {% else%}
+            <h2 class="mb-4 ">Similar product for you:</h2>
+            <div class="row ">
+                {% for product in x[0] %}
+                <div class="col-lg-3 col-md-4 col-sm-6 ">
+                    <div class="shadow mb-4">
+                        <a href="/{{product.category}}?view={{product.id}} ">
+                            <div class="card-img-top id_{{product.id}} " style="background: url( 'static/image/product/{{product.category}}/{{product.picture}}'); background-repeat:no-repeat; background-size: cover; height:200px;width:100% "></div>
+                        </a>
+                        <div class="card-body ">
+                            <h5><a class="card-title " href="/{{product.category}}?view={{product.id}} ">{{ product.pName}}</a></h5>
+                            <h4>₹{{product.price}}</h4>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <!-- /.col-lg-9 -->
+
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+{% endblock %}

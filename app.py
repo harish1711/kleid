@@ -314,7 +314,7 @@ def update():
     quantity=request.args.get('quantity', default = '*', type = str)
     # values = 'tshirt'
     now = datetime.datetime.now()
-    week = datetime.timedelta(days=7)
+    week = datetime.timedelta(days=0)
     delivery_date = now + week
     now_time = delivery_date.strftime("%y-%m-%d %H:%M:%S")
 
@@ -914,4 +914,4 @@ def developer():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
